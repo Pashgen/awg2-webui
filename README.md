@@ -6,6 +6,12 @@ Built from source — no pre-built binaries.
 ![Platforms](https://img.shields.io/badge/platform-amd64%20%7C%20arm64%20%7C%20armv7-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
+## Screenshots
+
+| Dashboard | CPS Generator | Add Peer |
+|---|---|---|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![CPS Generator](docs/screenshots/cps-generator.png) | ![Add Peer](docs/screenshots/add-peer.png) |
+
 ## Features
 
 - 🔒 **HTTPS** — self-signed or Let's Encrypt (via Web UI)
