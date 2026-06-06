@@ -1,6 +1,6 @@
 services:
   awg2-webui:
-    image: ghcr.io/sysmslog/awg2-webui:latest
+    image: ghcr.io/Pashgen/awg2-webui:latest
     container_name: awg2-webui
     restart: unless-stopped
     cap_add:

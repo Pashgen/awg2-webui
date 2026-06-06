@@ -31,7 +31,7 @@ docker run -d \
   -e WEB_USER=admin \
   -e WEB_PASS=changeme \
   -e AWG_ENDPOINT=auto \
-  ghcr.io/sysmslog/awg2-webui:latest
+  ghcr.io/Pashgen/awg2-webui:latest
 ```
 
 Open **https://localhost** in browser (accept self-signed cert warning).
@@ -39,7 +39,7 @@ Open **https://localhost** in browser (accept self-signed cert warning).
 ## Docker Compose
 
 ```bash
-curl -O https://raw.githubusercontent.com/sysmslog/awg2-webui/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/Pashgen/awg2-webui/main/docker-compose.yml
 # Edit WEB_PASS and AWG_ENDPOINT
 docker compose up -d
 ```
@@ -79,7 +79,7 @@ Key differences from standard deployment:
 ## Build from Source
 
 ```bash
-git clone https://github.com/sysmslog/awg2-webui
+git clone https://github.com/Pashgen/awg2-webui
 cd awg2-webui
 
 # Local (native arch)
@@ -87,7 +87,7 @@ docker build -t awg2-webui:local .
 
 # Multi-platform
 docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 \
-  -t ghcr.io/sysmslog/awg2-webui:latest --push .
+  -t ghcr.io/Pashgen/awg2-webui:latest --push .
 ```
 
 ## Architecture
