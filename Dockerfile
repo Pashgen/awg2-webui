@@ -56,7 +56,7 @@ FROM alpine:3.19
 
 RUN apk add --no-cache \
     iproute2 iptables iptables-legacy bash curl \
-    python3 py3-pip \
+    python3 py3-pip py3-pillow \
     nginx supervisor tini \
     openssl certbot
 
@@ -65,10 +65,10 @@ COPY --from=build-awg-go    /usr/bin/amneziawg-go /usr/bin/amneziawg-go
 COPY --from=build-awg-tools /usr/bin/awg           /usr/bin/awg
 COPY --from=build-awg-tools /usr/bin/awg-quick     /usr/bin/awg-quick
 
-# Web UI Python deps
+# Web UI Python deps (py3-pillow from apk — pre-built for all arches incl. arm/v7)
 RUN pip3 install \
     flask \
-    "qrcode[pil]" \
+    "qrcode" \
     cryptography \
     --break-system-packages
 
