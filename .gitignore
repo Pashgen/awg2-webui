@@ -30,3 +30,7 @@ awg2-webui-*.tar
 *.pem
 *.key
 *.crt
+
+# Internal / session files
+HANDOFF.md
+deploy_to_chr.sh
