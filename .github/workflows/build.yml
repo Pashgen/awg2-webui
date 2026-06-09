@@ -9,7 +9,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE: ghcr.io/Pashgen/awg2-webui
+  IMAGE: ghcr.io/pashgen/awg2-webui
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
@@ -51,8 +51,8 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.CR_PAT || secrets.GITHUB_TOKEN }}
+          username: pashgen
+          password: ${{ secrets.CR_PAT }}
 
       - name: Build and push
         uses: docker/build-push-action@v6
