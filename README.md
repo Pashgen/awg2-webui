@@ -39,7 +39,7 @@ docker run -d \
   -e WEB_USER=admin \
   -e WEB_PASS=changeme \
   -e AWG_ENDPOINT=auto \
-  ghcr.io/Pashgen/awg2-webui:latest
+  pashgen/awg2-webui:latest
 ```
 
 Open **https://localhost** in browser (accept self-signed cert warning).
@@ -95,7 +95,7 @@ docker build -t awg2-webui:local .
 
 # Multi-platform
 docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 \
-  -t ghcr.io/Pashgen/awg2-webui:latest --push .
+  -t pashgen/awg2-webui:latest --push .
 ```
 
 ## Architecture
@@ -157,7 +157,7 @@ docker run -d \
   -e WEB_USER=admin \
   -e WEB_PASS=ВашПароль \
   -e AWG_ENDPOINT=auto \
-  ghcr.io/Pashgen/awg2-webui:latest
+  pashgen/awg2-webui:latest
 ```
 
 Откройте **https://localhost** в браузере (примите предупреждение о self-signed сертификате).
@@ -208,8 +208,8 @@ docker compose up -d
 
 **Получить образ для CHR (amd64):**
 ```bash
-docker pull ghcr.io/Pashgen/awg2-webui:latest
-docker save ghcr.io/Pashgen/awg2-webui:latest -o awg2-webui.tar
+docker pull pashgen/awg2-webui:latest
+docker save pashgen/awg2-webui:latest -o awg2-webui.tar
 scp awg2-webui.tar admin@<IP_CHR>:disk1/awg2-webui.tar
 ```
 
