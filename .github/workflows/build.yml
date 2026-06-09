@@ -45,7 +45,7 @@ jobs:
         if: github.event_name != 'pull_request'
         env:
           DOCKER_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-        run: echo "$DOCKER_TOKEN" | docker login -u pashgen --password-stdin
+        run: docker login -u "pashgen" -p "$DOCKER_TOKEN"
 
       - name: Build and push
         uses: docker/build-push-action@v6
