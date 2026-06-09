@@ -1,8 +1,10 @@
 # AWG 2.0 Web UI
 
 Web management panel for [AmneziaWG 2.0](https://github.com/amnezia-vpn/amneziawg-go) VPN server.
-Built from source — no pre-built binaries.
+Built entirely from source — no pre-built binaries.
 
+[![Build](https://github.com/Pashgen/awg2-webui/actions/workflows/build.yml/badge.svg)](https://github.com/Pashgen/awg2-webui/actions/workflows/build.yml)
+[![GitHub release](https://img.shields.io/github/v/release/Pashgen/awg2-webui)](https://github.com/Pashgen/awg2-webui/releases)
 ![Platforms](https://img.shields.io/badge/platform-amd64%20%7C%20arm64%20%7C%20armv7-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -136,3 +138,85 @@ Certificate renews automatically every Tuesday at 03:00.
 ## License
 
 MIT
+
+---
+
+## 🇷🇺 Инструкция на русском
+
+### Быстрый старт
+
+```bash
+docker run -d \
+  --name awg2-webui \
+  --cap-add NET_ADMIN \
+  --cap-add SYS_MODULE \
+  --sysctl net.ipv4.ip_forward=1 \
+  -v awg_config:/etc/amnezia/amneziawg \
+  -v /lib/modules:/lib/modules:ro \
+  -p 443:443 -p 80:80 -p 51820:51820/udp \
+  -e WEB_USER=admin \
+  -e WEB_PASS=ВашПароль \
+  -e AWG_ENDPOINT=auto \
+  ghcr.io/Pashgen/awg2-webui:latest
+```
+
+Откройте **https://localhost** в браузере (примите предупреждение о self-signed сертификате).
+
+### Docker Compose
+
+```bash
+curl -O https://raw.githubusercontent.com/Pashgen/awg2-webui/main/docker-compose.yml
+# Отредактируйте WEB_PASS и AWG_ENDPOINT
+docker compose up -d
+```
+
+### Переменные окружения
+
+| Переменная | По умолчанию | Описание |
+|---|---|---|
+| `WEB_USER` | `admin` | Логин для входа в Web UI |
+| `WEB_PASS` | `admin` | Пароль — **обязательно смените!** |
+| `SECRET_KEY` | авто | Секретный ключ сессии Flask |
+| `AWG_ENDPOINT` | `auto` | Адрес сервера для клиентов (`IP:PORT`) |
+| `AWG_PORT` | `51820` | Порт AWG |
+| `AWG_SUBNET` | `10.8.0.0/24` | Подсеть VPN |
+| `AWG_DNS` | `1.1.1.1,8.8.8.8` | DNS для клиентов |
+| `SSL_DOMAIN` | — | Домен для Let's Encrypt (или настройте через UI) |
+| `SSL_EMAIL` | — | Email для Let's Encrypt |
+
+### SSL сертификат
+
+**Self-signed** (работает везде, браузер покажет предупреждение):
+Настройте через **Settings → SSL → Self-signed** прямо в Web UI.
+
+**Let's Encrypt** (нужен реальный домен и открытый порт 80):
+```bash
+-e SSL_DOMAIN=vpn.example.com
+-e SSL_EMAIL=admin@example.com
+```
+Или через **Settings → SSL → Let's Encrypt** в Web UI.
+Сертификат обновляется автоматически каждый вторник в 03:00.
+
+### MikroTik CHR
+
+Полная инструкция по развёртыванию на RouterOS Container: **[docs/mikrotik-chr.md](docs/mikrotik-chr.md)**
+
+Ключевые отличия от стандартного деплоя:
+- Образ использует `iptables-legacy` (требует ядро RouterOS)
+- nginx: `sendfile off; aio off;` (совместимость с overlayfs)
+- Образ загружается через `docker save` → `scp` → `/container add`
+
+**Получить образ для CHR (amd64):**
+```bash
+docker pull ghcr.io/Pashgen/awg2-webui:latest
+docker save ghcr.io/Pashgen/awg2-webui:latest -o awg2-webui.tar
+scp awg2-webui.tar admin@<IP_CHR>:disk1/awg2-webui.tar
+```
+
+### Сборка из исходников
+
+```bash
+git clone https://github.com/Pashgen/awg2-webui
+cd awg2-webui
+docker build -t awg2-webui:local .
+```

@@ -1427,16 +1427,20 @@ def init_server():
 
     address    = data.get("address", "10.8.0.1/24")
     listen_port = int(data.get("listen_port", AWG_PORT))
+    subnet = address.rsplit("/", 1)[0].rsplit(".", 1)[0] + ".0/24"  # e.g. 10.8.0.0/24
+    # Auto-detect iptables binary (iptables-legacy on CHR/old kernels, iptables elsewhere)
+    # Auto-detect outbound interface via default route — no hardcoded 'eth0'
+    ipt = "$(command -v iptables-legacy || command -v iptables)"
     post_up    = (
         f"sysctl -w net.ipv4.ip_forward=1; "
-        f"iptables-legacy -A FORWARD -i {AWG_IF} -j ACCEPT; "
-        f"iptables-legacy -A FORWARD -o {AWG_IF} -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT; "
-        f"iptables-legacy -t nat -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE"
+        f"{ipt} -A FORWARD -i {AWG_IF} -j ACCEPT; "
+        f"{ipt} -A FORWARD -o {AWG_IF} -j ACCEPT; "
+        f"{ipt} -t nat -A POSTROUTING -s {subnet} -j MASQUERADE"
     )
     post_down  = (
-        f"iptables-legacy -D FORWARD -i {AWG_IF} -j ACCEPT; "
-        f"iptables-legacy -D FORWARD -o {AWG_IF} -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT; "
-        f"iptables-legacy -t nat -D POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE"
+        f"{ipt} -D FORWARD -i {AWG_IF} -j ACCEPT; "
+        f"{ipt} -D FORWARD -o {AWG_IF} -j ACCEPT; "
+        f"{ipt} -t nat -D POSTROUTING -s {subnet} -j MASQUERADE"
     )
 
     version = awg_params["version"]
