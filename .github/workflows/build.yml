@@ -41,6 +41,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Debug auth
+        if: github.event_name != 'pull_request'
+        env:
+          DOCKER_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          echo "Token set: $( [ -n "$DOCKER_TOKEN" ] && echo YES || echo NO )"
+          echo "Token length: ${#DOCKER_TOKEN}"
+
       - name: Log in to Docker Hub
         if: github.event_name != 'pull_request'
         env:
